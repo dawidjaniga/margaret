@@ -7,7 +7,7 @@ class LoginController {
     await ally.driver('google').redirect()
   }
 
-  async callback ({ ally, auth }) {
+  async login ({ ally, auth }) {
     try {
       const googleUser = await ally.driver('google').getUser()
 

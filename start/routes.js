@@ -18,4 +18,4 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 Route.get('login/google', 'LoginController.redirect')
-Route.get('authenticated/google', 'LoginController.callback')
+Route.get('authenticated/google', 'LoginController.login')
