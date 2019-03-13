@@ -26,7 +26,7 @@ class LoginController {
 
       return 'Logged in'
     } catch (error) {
-      console.log(error)
+      console.error(error)
       return 'Unable to authenticate. Try again later'
     }
   }

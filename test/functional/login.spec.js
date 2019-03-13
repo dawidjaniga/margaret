@@ -1,43 +1,47 @@
 'use strict'
 
 const { test, trait } = use('Test/Suite')('Login')
-const { ioc } = use('@adonisjs/fold')
+const Context = use('Adonis/Src/HttpContext')
+const User = use('App/Models/User')
+const ally = Context.getGetter('ally')
 
 trait('Test/ApiClient')
+trait('DatabaseTransactions')
+
+function fakeAlly (email, token) {
+  return {
+    driver () {
+      return {
+        getUser: () => ({
+          getEmail () {
+            return email
+          },
+
+          getAccessToken () {
+            return token
+          }
+        })
+      }
+    }
+  }
+}
 
 test('redirect to Google Console login', async ({ assert, client }) => {
   const response = await client.get('/login/google').end()
   response.assertRedirect('/ServiceLogin')
 })
 
-// @todo
 test('login user after success callback', async ({ assert, client }) => {
-  ioc.fake('Adonis/Addons/Ally', () => {
-    console.log('ally fakes')
-    return {
-      driver () {
-        const getUser = {
-          getEmail () {
-            return 'user@werty.pl'
-          },
-
-          getAccessToken () {
-            return '123adsv'
-          }
-        }
-
-        return {
-          getUser
-        }
-      }
-    }
-  })
+  const email = 'user@domain.com'
+  const token = 'zxc123qwerty'
+  Context.getter('ally', () => fakeAlly(email, token))
 
   const response = await client.get('/authenticated/google').end()
+  const user = await User.findBy('email', email)
+
+  assert.equal(user.token, token)
+  assert.equal(user.login_source, 'google')
   response.assertText('Logged in')
-})
 
-test('fail login', async ({ assert, client }) => {
-  const response = await client.get('/authenticated/google').end()
-  response.assertText('Unable to authenticate. Try again later')
+  Context.getter('ally', ally, true)
 })
