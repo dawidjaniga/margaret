@@ -8,10 +8,11 @@ class WordsSchema extends Schema {
     this.create('words', (table) => {
       table.increments()
       table.string('word').notNullable()
-      table.specificType('syllabes', 'jsonb[]').notNullable()
+      table.specificType('syllables', 'jsonb').notNullable()
+      table.integer('syllables_amount').notNullable()
       table.integer('stressed_syllable').notNullable()
       table.string('ipa')
-      table.string('definition')
+      table.text('definition')
       table.string('speech_part')
       table.string('list')
       table.timestamps()
