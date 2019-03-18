@@ -16,8 +16,6 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('index')
-
 Route.get('login/google', 'LoginController.redirect')
 Route.get('authenticated/google', 'LoginController.login')
 

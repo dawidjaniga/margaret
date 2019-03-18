@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const publicPath = path.join(__dirname, 'public')
 
@@ -17,11 +18,16 @@ module.exports = {
     port: 9000
 
   },
+  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {
         test: /\.(sass|scss)$/,
         loader: ['css-loader', 'sass-loader']
+      },
+      {
+        test: /\.hbs$/,
+        loader: 'handlebars-loader'
       },
       {
         test: /\.js$/,
@@ -31,8 +37,11 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }),
+    new HtmlWebpackPlugin({
+      template: './resources/assets/app/index.hbs'
     })
   ]
 }
