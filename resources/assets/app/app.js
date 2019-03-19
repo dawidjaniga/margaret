@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
+import LoginView from './views/login/login'
 import { hot } from 'react-hot-loader/root'
-
-import Title from './components/Title'
 
 class App extends Component {
   render () {
-    return <Title>Margaret</Title>
+    return <LoginView />
   }
 }
 
