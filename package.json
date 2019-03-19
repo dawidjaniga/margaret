@@ -8,7 +8,8 @@
     "start": "node server.js",
     "test": "node ace test",
     "dev": "NODE_ENV=development npx webpack-dev-server",
-    "build": "NODE_ENV=production npx webpack"
+    "build": "NODE_ENV=production npx webpack",
+    "generate": "npx plop"
   },
   "keywords": [
     "english",
@@ -38,6 +39,7 @@
     "handlebars-loader": "1.7.1",
     "hot-loader": "0.0.0",
     "pg": "7.8.2",
+    "react-google-button": "0.5.3",
     "react-hot-loader": "4.8.0",
     "standard": "12.0.1",
     "style-loader": "0.23.1",
@@ -53,6 +55,7 @@
     "cz-conventional-changelog": "2.1.0",
     "html-webpack-plugin": "3.2.0",
     "node-sass": "4.11.0",
+    "plop": "2.3.0",
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "webpack": "4.29.6",
