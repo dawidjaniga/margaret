@@ -16,7 +16,10 @@ module.exports = {
     contentBase: publicPath,
     compress: true,
     port: 9000,
-    hot: true
+    hot: true,
+    historyApiFallback: {
+      index: 'index.html'
+    }
 
   },
   mode: process.env.NODE_ENV,

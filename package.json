@@ -41,6 +41,7 @@
     "pg": "7.8.2",
     "react-google-button": "0.5.3",
     "react-hot-loader": "4.8.0",
+    "react-router-dom": "5.0.0",
     "standard": "12.0.1",
     "style-loader": "0.23.1",
     "styled-components": "4.1.3"
