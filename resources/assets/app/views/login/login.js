@@ -1,22 +1,32 @@
 import React from 'react'
-import { Layout, Breadcrumb } from 'antd'
+import { Layout, Typography } from 'antd'
+import styled from 'styled-components'
+import GoogleButton from 'react-google-button'
+import LayoutContent from './../../components/LayoutContent'
 import Header from './../../components/Header'
 import Footer from './../../components/Footer'
 
-const { Content } = Layout
+const { Title } = Typography
+
+const Wrapper = styled.div`
+  max-width: 300px;
+  margin: auto
+`
 
 export default function LoginView () {
+  function redirectToGoogle () {
+    window.location = 'http://127.0.0.1:3333/login/google'
+  }
+
   return (
     <Layout className='layout'>
       <Header />
-      <Content style={{ padding: '0 50px' }}>
-        <Breadcrumb style={{ margin: '16px 0' }}>
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>Apps</Breadcrumb.Item>
-        </Breadcrumb>
-        <div style={{ background: '#fff', padding: 24, minHeight: 290 }}>. Login</div>
-      </Content>
+      <LayoutContent>
+        <Title level={1}>Login</Title>
+        <Wrapper>
+          <GoogleButton onClick={redirectToGoogle} />
+        </Wrapper>
+      </LayoutContent>
       <Footer />
     </Layout>
   )
