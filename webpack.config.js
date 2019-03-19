@@ -6,7 +6,7 @@ const publicPath = path.join(__dirname, 'public')
 
 module.exports = {
   entry: [
-    './resources/assets/app/app.js'
+    './resources/assets/app/index.js'
   ],
   output: {
     path: publicPath,
@@ -15,7 +15,8 @@ module.exports = {
   devServer: {
     contentBase: publicPath,
     compress: true,
-    port: 9000
+    port: 9000,
+    hot: true
 
   },
   mode: process.env.NODE_ENV,
@@ -42,6 +43,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: './resources/assets/app/index.hbs'
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 }
