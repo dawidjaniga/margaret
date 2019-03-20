@@ -19,8 +19,9 @@ const Route = use('Route')
 Route.get('login/google', 'LoginController.redirect')
 Route.get('authenticated/google', 'LoginController.login')
 
-// @TODO use api only
-Route.resource('words', 'WordController')
+Route
+  .resource('words', 'WordController')
+  .apiOnly()
 
 Route
   .resource('answers', 'AnswerController')
