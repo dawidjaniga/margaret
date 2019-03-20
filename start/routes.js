@@ -19,4 +19,10 @@ const Route = use('Route')
 Route.get('login/google', 'LoginController.redirect')
 Route.get('authenticated/google', 'LoginController.login')
 
-Route.resource('words', 'WordController')
+Route
+  .resource('words', 'WordController')
+  .apiOnly()
+
+Route
+  .resource('answers', 'AnswerController')
+  .apiOnly()
