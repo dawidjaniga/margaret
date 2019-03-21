@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Typography, Spin } from 'antd'
+import { Layout, Typography, Spin, Button } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import LayoutContent from '../../components/LayoutContent'
@@ -10,6 +10,12 @@ import Word from '../../components/Word'
 const { Title } = Typography
 
 const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const NextButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +34,7 @@ export default class PracticeView extends Component {
   }
 
   componentDidMount () {
-    if (!this.state.wordsDownloaded && !this.state.showLoader) {
+    if (!this.state.wordsDownloaded) {
       this.loadWords()
     }
   }
@@ -43,11 +49,11 @@ export default class PracticeView extends Component {
         setTimeout(() => {
           this.setState({
             words: response.data,
-            currentWord: response.data[3],
             wordsDownloaded: true,
             showLoader: false
-          })
-        }, 2000)
+          },
+          this.selectNextWord)
+        }, 200)
       })
       .catch(err => {
         this.setState({
@@ -57,10 +63,55 @@ export default class PracticeView extends Component {
       })
   }
 
-  onClickWord = (answeredSyllable) => {
-    this.setState({
+  saveAnswer () {
+    // this.setState({
+    //   showLoader: true
+    // })
+    const { currentWord, answeredSyllable } = this.state
+
+    axios.post('http://127.0.0.1:3333/answers', {
+      wordId: currentWord.id,
       answeredSyllable
     })
+      .then(response => {
+        console.log('response:', response)
+        // this.setState({
+        // })
+      })
+      .catch(err => {
+        console.error(err)
+      })
+    }
+  
+  onClickNext = () => {
+    this.setState(
+      {
+        answeredSyllable: 0,
+      },
+      this.selectNextWord
+      )
+  }
+
+  selectNextWord() {
+    const words = this.state.words
+    const nextWord = words.shift()
+    console.log('words:', words)
+
+    this.setState({
+      words,
+      currentWord: nextWord
+    })
+  }
+
+  
+
+  onClickWord = (answeredSyllable) => {
+    this.setState(
+      {
+        answeredSyllable
+      },
+      this.saveAnswer
+    )
   }
 
   render () {
@@ -72,6 +123,9 @@ export default class PracticeView extends Component {
         <Header />
         <LayoutContent>
           <Title level={1}>Practice</Title>
+          <NextButtonWrapper>
+            <Button type="primary" icon="double-right" onClick={this.onClickNext}>Next</Button>
+          </NextButtonWrapper>
           <Wrapper>
             {this.state.showLoader && <Spin />}
             {currentWord &&
