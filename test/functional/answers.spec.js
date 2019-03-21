@@ -68,8 +68,6 @@ test('throw error when saving incorrectly build answer', async ({ client, assert
       answeredSyllable: ''
     })
     .end()
-  const answer = response.body
-  console.log('answer:', answer)
 
   response.assertStatus(500)
 })
