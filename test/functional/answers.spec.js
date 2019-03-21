@@ -2,21 +2,15 @@
 
 const { test, trait } = use('Test/Suite')('Answers')
 const Word = use('App/Models/Word')
-const User = use('App/Models/User')
+const TestHelper = use('App/Services/TestHelper')
 
 trait('Auth/Client')
 trait('Session/Client')
 trait('Test/ApiClient')
 trait('DatabaseTransactions')
 
-async function createUser () {
-  return User.create({
-    email: 'user@domain.com'
-  })
-}
-
 test('save answer with correct answer', async ({ client, assert }) => {
-  const user = await createUser()
+  const user = await TestHelper.createUser()
   const word = await Word.create({
     word: 'outer',
     syllables: JSON.stringify([
@@ -46,7 +40,7 @@ test('save answer with correct answer', async ({ client, assert }) => {
 })
 
 test('save answer with incorrect answer', async ({ client, assert }) => {
-  const user = await createUser()
+  const user = await TestHelper.createUser()
   const word = await Word.create({
     word: 'outer',
     syllables: JSON.stringify([
@@ -75,7 +69,7 @@ test('save answer with incorrect answer', async ({ client, assert }) => {
 })
 
 test('throw error when saving incorrectly build answer', async ({ client, assert }) => {
-  const user = await createUser()
+  const user = await TestHelper.createUser()
   const response = await client
     .post('/answers')
     .send({
