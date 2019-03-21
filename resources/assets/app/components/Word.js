@@ -30,12 +30,18 @@ ${props => {
 
 const SpeechPart = styled.div`
 font-style: italic;
+opacity: .6
 `
 
 const Definition = styled.dfn`
 font-size: 10px;
 display: block;
 margin: 1em 0;
+opacity: .2
+
+&:hover {
+  opacity: .5;
+}
 `
 
 function Syllable ({ syllable, number, highlight, onClick }) {
