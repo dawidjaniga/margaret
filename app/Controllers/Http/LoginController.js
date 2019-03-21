@@ -22,7 +22,12 @@ class LoginController {
       }
 
       const user = await User.findOrCreate(whereClause, userDetails)
-      await auth.login(user)
+
+      try {
+        await auth.check()
+      } catch (error) {
+        await auth.remember(true).login(user)
+      }
 
       return 'Logged in'
     } catch (error) {
