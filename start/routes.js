@@ -26,3 +26,4 @@ Route
 Route
   .resource('answers', 'AnswerController')
   .apiOnly()
+  .middleware('auth')
