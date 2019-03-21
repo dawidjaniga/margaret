@@ -22,7 +22,9 @@ Route.get('authenticated/google', 'LoginController.login')
 Route
   .resource('words', 'WordController')
   .apiOnly()
+  .middleware('auth')
 
 Route
   .resource('answers', 'AnswerController')
   .apiOnly()
+  .middleware('auth')

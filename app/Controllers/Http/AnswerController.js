@@ -30,14 +30,14 @@ class AnswerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
     const { wordId, answeredSyllable } = request.post()
     const word = await Word.findBy('id', wordId)
     const correct = word.stressed_syllable === answeredSyllable
 
     try {
       const answer = await Answer.create({
-        user_id: 1,
+        user_id: auth.user.id,
         word_id: wordId,
         answered_syllable: answeredSyllable,
         correct
