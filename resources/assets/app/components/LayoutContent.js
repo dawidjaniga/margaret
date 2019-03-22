@@ -8,7 +8,9 @@ const StyledContent = styled(Content)`
   padding: 24px;
   background: #fff;
   min-height: 290px;
-  margin: 40px;
+  width: 80%;
+  max-width: 1000px;
+  margin: 40px auto;
 }
 `
 export default function ({ children }) {
