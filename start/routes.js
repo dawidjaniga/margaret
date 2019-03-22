@@ -1,4 +1,5 @@
 'use strict'
+const Helpers = use('Helpers')
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,6 @@ Route
   .resource('answers', 'AnswerController')
   .apiOnly()
   .middleware('auth')
+
+Route.any('*', ({ response }) =>
+  response.download(Helpers.publicPath('app.html')))

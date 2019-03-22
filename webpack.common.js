@@ -1,10 +1,8 @@
 const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-
 const publicPath = path.join(__dirname, 'public')
 
 module.exports = {
+  mode: process.env.NODE_ENV,
   entry: [
     './resources/assets/app/index.js'
   ],
@@ -12,17 +10,6 @@ module.exports = {
     path: publicPath,
     filename: 'app.js'
   },
-  devServer: {
-    contentBase: publicPath,
-    compress: true,
-    port: 9000,
-    hot: true,
-    historyApiFallback: {
-      index: 'index.html'
-    }
-
-  },
-  mode: process.env.NODE_ENV,
   module: {
     rules: [
       {
@@ -39,14 +26,5 @@ module.exports = {
         loader: ['babel-loader', 'react-hot-loader/webpack']
       }
     ]
-  },
-  plugins: [
-    new webpack.EnvironmentPlugin({
-      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-    }),
-    new HtmlWebpackPlugin({
-      template: './resources/assets/app/index.hbs'
-    }),
-    new webpack.HotModuleReplacementPlugin()
-  ]
+  }
 }

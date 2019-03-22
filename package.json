@@ -5,10 +5,10 @@
   "description": "Learn english word stress",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "NODE_ENV=development npx webpack-dev-server --config webpack.dev.js & NODE_ENV=development adonis serve --dev",
+    "start:production": "node server.js",
     "test": "node ace test",
-    "dev": "NODE_ENV=development npx webpack-dev-server",
-    "build": "NODE_ENV=production npx webpack",
+    "build": "NODE_ENV=production npx webpack --config webpack.prod.js",
     "generate": "npx plop"
   },
   "keywords": [
@@ -62,7 +62,8 @@
     "react-dom": "16.8.4",
     "webpack": "4.29.6",
     "webpack-cli": "3.3.0",
-    "webpack-dev-server": "3.2.1"
+    "webpack-dev-server": "3.2.1",
+    "webpack-merge": "4.2.1"
   },
   "autoload": {
     "App": "./app"
