@@ -4,8 +4,10 @@ const { test, trait } = use('Test/Suite')('Login')
 const Context = use('Adonis/Src/HttpContext')
 const User = use('App/Models/User')
 const ally = Context.getGetter('ally')
+const TestHelper = use('App/Services/TestHelper')
 
 trait('Test/ApiClient')
+trait('Session/Client')
 trait('DatabaseTransactions')
 
 function fakeAlly (email, token) {
@@ -32,16 +34,20 @@ test('redirect to Google Console login', async ({ assert, client }) => {
 })
 
 test('login user after success callback', async ({ assert, client }) => {
-  const email = 'user@domain.com'
-  const token = 'zxc123qwerty'
+  const email = TestHelper.getUserEmail()
+  const token = TestHelper.getUserToken()
   Context.getter('ally', () => fakeAlly(email, token))
 
-  const response = await client.get('/authenticated/google').end()
+  const redirectUrl = '/destination-url'
+  const response = await client
+    .get('/authenticated/google')
+    .session('redirectUrl', redirectUrl)
+    .end()
   const user = await User.findBy('email', email)
 
   assert.equal(user.token, token)
   assert.equal(user.login_source, 'google')
-  response.assertText('Logged in')
+  response.assertRedirect(redirectUrl)
 
   Context.getter('ally', ally, true)
 })
