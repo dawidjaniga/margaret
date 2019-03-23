@@ -18,7 +18,9 @@ const Helpers = use('Helpers')
 const Route = use('Route')
 
 Route.get('login/google', 'LoginController.redirect')
+  .middleware(['guest'])
 Route.get('authenticated/google', 'LoginController.login')
+  .middleware(['guest'])
 
 Route
   .resource('words', 'WordController')
