@@ -9,9 +9,7 @@ module.exports = merge(common, {
     port: 9000,
     hot: true,
     open: true,
-    historyApiFallback: {
-      index: 'index.html'
-    }
+    historyApiFallback: true
   },
   devtool: 'inline-source-map',
   plugins: [
