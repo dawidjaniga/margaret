@@ -6,9 +6,11 @@ import GoogleButton from 'react-google-button'
 import LayoutContent from './../../components/LayoutContent'
 import Header from './../../components/Header'
 import Footer from './../../components/Footer'
+import { connect } from 'react-redux'
+import { setupAxios } from '../../actions'
+import { LOGIN_SUCCESS_SET_BEARER } from './constants'
 
 const { Title } = Typography
-
 const Wrapper = styled.div`
   max-width: 300px;
   margin: auto
@@ -35,9 +37,16 @@ export default class LoginView extends React.Component {
   }
 
   receiveMessage = event => {
-    if (event.origin === window.origin) {
-      localStorage.setItem('bearer', event.data)
+    const { type, payload } = event.data
+    
+    if (event.origin === window.origin && type === LOGIN_SUCCESS_SET_BEARER) {
+      this.setApiBearer(payload.bearer)
+      setupAxios()
     }
+  }
+  
+  setApiBearer = bearer => {
+    localStorage.setItem('bearer', bearer)
   }
 
   render () {

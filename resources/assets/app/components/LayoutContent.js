@@ -9,6 +9,7 @@ const StyledContent = styled(Content)`
   background: #fff;
   min-height: 290px;
   width: 80%;
+  height: 100%;
   max-width: 1000px;
   margin: 40px auto;
 }
