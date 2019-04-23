@@ -3,14 +3,16 @@
 const User = use('App/Models/User')
 
 class LoginController {
-  async redirect ({ ally }) {
+  async redirect ({ request, session, ally }) {
+    const redirectUrl = request.input('redirectUrl')
+    session.put('redirectUrl', redirectUrl)
     await ally.driver('google').redirect()
   }
 
-  async login ({ ally, auth }) {
+  async login ({ request, response, session, ally, auth, view }) {
+    const redirectUrl = session.get('redirectUrl')
     try {
       const googleUser = await ally.driver('google').getUser()
-
       const userDetails = {
         email: googleUser.getEmail(),
         token: googleUser.getAccessToken(),
@@ -22,17 +24,12 @@ class LoginController {
       }
 
       const user = await User.findOrCreate(whereClause, userDetails)
-
-      try {
-        await auth.check()
-      } catch (error) {
-        await auth.remember(true).login(user)
-      }
-
-      return 'Logged in'
+      const token = await auth.generate(user)
+      const redirectDestination = `${redirectUrl}?token=${token.token}`
+      response.redirect(redirectDestination)
     } catch (error) {
       console.error(error)
-      return 'Unable to authenticate. Try again later'
+      response.redirect(`${redirectUrl}?error=${error}`)
     }
   }
 }

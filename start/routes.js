@@ -1,4 +1,5 @@
 'use strict'
+const Helpers = use('Helpers')
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,9 @@
 const Route = use('Route')
 
 Route.get('login/google', 'LoginController.redirect')
+  .middleware(['guest'])
 Route.get('authenticated/google', 'LoginController.login')
+  .middleware(['guest'])
 
 Route
   .resource('words', 'WordController')
@@ -28,3 +31,6 @@ Route
   .resource('answers', 'AnswerController')
   .apiOnly()
   .middleware('auth')
+
+Route.any('*', ({ response }) =>
+  response.download(Helpers.publicPath('app.html')))
