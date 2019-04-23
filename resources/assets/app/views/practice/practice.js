@@ -21,6 +21,8 @@ const NextButtonWrapper = styled.div`
   align-items: center;
 `
 
+const APP_URL = process.env.APP_URL
+
 export default class PracticeView extends Component {
   constructor (props) {
     super(props)
@@ -44,7 +46,7 @@ export default class PracticeView extends Component {
       showLoader: true
     })
 
-    axios.get('http://127.0.0.1:3333/words')
+    axios.get(`${APP_URL}/words`)
       .then(response => {
         setTimeout(() => {
           this.setState({
@@ -69,7 +71,7 @@ export default class PracticeView extends Component {
     // })
     const { currentWord, answeredSyllable } = this.state
 
-    axios.post('http://127.0.0.1:3333/answers', {
+    axios.post(`${APP_URL}/answers`, {
       wordId: currentWord.id,
       answeredSyllable
     })
