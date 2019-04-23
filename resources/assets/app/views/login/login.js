@@ -16,6 +16,9 @@ const Wrapper = styled.div`
   margin: auto
 `
 
+const APP_URL = process.env.APP_URL
+const FRONTEND_URL = process.env.FRONTEND_URL
+
 export default class LoginView extends React.Component {
   componentDidMount () {
     this.messageHandler = window.addEventListener('message', this.receiveMessage, false)
@@ -26,7 +29,7 @@ export default class LoginView extends React.Component {
   }
 
   openGoogleSignIn = () => {
-    const url = 'http://127.0.0.1:3333/login/google?redirectUrl=http://localhost:9000/login-success'
+    const url = `${APP_URL}/login/google?redirectUrl=${FRONTEND_URL}/login-success`
     const target = '_blank'
     const width = 350
     const height = 600

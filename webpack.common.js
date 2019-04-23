@@ -1,3 +1,4 @@
+const Dotenv = require('dotenv-webpack')
 const path = require('path')
 const publicPath = path.join(__dirname, 'public')
 
@@ -26,5 +27,8 @@ module.exports = {
         loader: ['babel-loader', 'react-hot-loader/webpack']
       }
     ]
-  }
+  },
+  plugins: [
+    new Dotenv()
+  ]
 }

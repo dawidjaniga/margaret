@@ -36,6 +36,7 @@
     "@hot-loader/react-dom": "16.8.4",
     "antd": "3.15.1",
     "axios": "0.18.0",
+    "dotenv-webpack": "1.7.0",
     "handlebars": "4.1.1",
     "handlebars-loader": "1.7.1",
     "hot-loader": "0.0.0",
