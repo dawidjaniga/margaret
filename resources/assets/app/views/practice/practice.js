@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Typography, Spin, Button } from 'antd'
+import { Layout, Typography, Spin, Button, List, Progress } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import LayoutContent from '../../components/LayoutContent'
@@ -11,14 +11,38 @@ const { Title } = Typography
 
 const Wrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
+`
+
+const ProgressWrapper = styled.div`
+  margin: 5%;
 `
 
 const NextButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`
+
+const CurrentWordWrapper = styled.div`
+  width: 100%;
+`
+
+const CorrectAnswersRatioWrapper = styled.div`
+  width: 100%;
+  text-align: center;
+  margin: 5%;
+`
+
+const WordListHeader = styled.h3`
+  text-align: center;
+`
+
+const WordListWrapper = styled.div`
+  width: 45%;
+  margin: 0 2.5%;
 `
 
 const APP_URL = process.env.APP_URL
@@ -28,10 +52,16 @@ export default class PracticeView extends Component {
     super(props)
     this.state = {
       words: [],
+      correctAnswers: [],
+      incorrectAnswers: [],
       currentWord: undefined,
       wordsDownloaded: false,
       showLoader: true,
       answeredSyllable: 0,
+      progress: 0,
+      correctAnswersRatio: 0,
+      disableNextButtonClick: true,
+      disableWordClick: false
     }
   }
 
@@ -66,19 +96,30 @@ export default class PracticeView extends Component {
   }
 
   saveAnswer () {
-    // this.setState({
-    //   showLoader: true
-    // })
-    const { currentWord, answeredSyllable } = this.state
+    const { currentWord, answeredSyllable, correctAnswers, incorrectAnswers } = this.state
 
     axios.post(`${APP_URL}/answers`, {
       wordId: currentWord.id,
       answeredSyllable
     })
       .then(response => {
-        console.log('response:', response)
-        // this.setState({
-        // })
+        let newCorrectAnswers = correctAnswers
+        let newIncorrectAnswers = incorrectAnswers
+        let answeredWords
+        
+        if (response.data.data.correct) {
+          newCorrectAnswers = [currentWord.word, ...correctAnswers]
+        } else {
+          newIncorrectAnswers = [currentWord.word, ...incorrectAnswers]
+        }
+
+        answeredWords = newCorrectAnswers.length + newIncorrectAnswers.length
+
+        this.setState({
+          correctAnswersRatio: Math.round(newCorrectAnswers.length / (answeredWords) * 100),
+          correctAnswers: newCorrectAnswers,
+          incorrectAnswers: newIncorrectAnswers
+        })
       })
       .catch(err => {
         console.error(err)
@@ -97,11 +138,13 @@ export default class PracticeView extends Component {
   selectNextWord() {
     const words = this.state.words
     const nextWord = words.shift()
-    console.log('words:', words)
 
     this.setState({
       words,
-      currentWord: nextWord
+      currentWord: nextWord,
+      disableWordClick: false,
+      disableNextButtonClick: true,
+      progress: (100 - words.length)
     })
   }
 
@@ -110,26 +153,48 @@ export default class PracticeView extends Component {
   onClickWord = (answeredSyllable) => {
     this.setState(
       {
-        answeredSyllable
+        answeredSyllable,
+        disableWordClick: true,
+        disableNextButtonClick: false,
       },
       this.saveAnswer
     )
   }
 
   render () {
-    const { currentWord, answeredSyllable } = this.state
+    const {
+      currentWord,
+      words,
+      answeredSyllable,
+      disableWordClick,
+      correctAnswers,
+      incorrectAnswers,
+      progress,
+      correctAnswersRatio,
+      disableNextButtonClick
+    } = this.state
     const syllableToHighlight = answeredSyllable
-
+    
     return (
       <Layout className='layout'>
         <Header />
         <LayoutContent>
           <Title level={1}>Practice</Title>
-          <NextButtonWrapper>
-            <Button type="primary" icon="double-right" onClick={this.onClickNext}>Next</Button>
-          </NextButtonWrapper>
+          <ProgressWrapper>
+          <Progress
+            type="line"
+            strokeColor={{
+              '0%': '#6ded4a',
+              '100%': '#53c423',
+            }}
+            percent={progress}
+            status="active"
+            format={() => `${100 - words.length} / 100`}
+          />
+          </ProgressWrapper>
           <Wrapper>
             {this.state.showLoader && <Spin />}
+            <CurrentWordWrapper>
             {currentWord &&
             <Word
               syllables={currentWord.syllables}
@@ -139,8 +204,35 @@ export default class PracticeView extends Component {
               definition={currentWord.definition}
               ipa={currentWord.ipa}
               onClick={this.onClickWord}
+              disableClick={disableWordClick}
             />
             }
+            </CurrentWordWrapper>
+            <NextButtonWrapper>
+              <Button type="primary" icon="double-right" onClick={this.onClickNext} disabled={disableNextButtonClick}>Next</Button>
+            </NextButtonWrapper>
+            <CorrectAnswersRatioWrapper>
+            <Progress
+              type="circle"
+              width={100}
+              percent={correctAnswersRatio}
+              format={() => `${correctAnswersRatio}%`}
+            />
+            </CorrectAnswersRatioWrapper>
+            <WordListWrapper>
+            <List
+              header={<WordListHeader>✅ {correctAnswers.length}</WordListHeader>}
+              dataSource={correctAnswers}
+              renderItem={item => (<List.Item>{item}</List.Item>)}
+            />
+            </WordListWrapper>
+            <WordListWrapper>
+            <List
+              header={<WordListHeader>❌ {incorrectAnswers.length}</WordListHeader>}
+              dataSource={incorrectAnswers}
+              renderItem={item => (<List.Item>{item}</List.Item>)}
+            />
+            </WordListWrapper>
           </Wrapper>
         </LayoutContent>
         <Footer />
