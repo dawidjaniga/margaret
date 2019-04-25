@@ -1,6 +1,8 @@
 'use strict'
 const Word = use('App/Models/Word')
 const config = use('Config').get('words')
+const Database = use('Database')
+const shuffle = require('lodash/shuffle')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -19,9 +21,22 @@ class WordController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
-    const { limit } = request.get()
-    const words = await Word.pick(limit || config.defaultLimit)
+  async index ({ request, response, auth }) {
+    const { filter = {}, limit } = request.get()
+    const wordsLimit = limit || config.defaultLimit
+    let words
+
+    if (filter.level === 'difficult') {
+      const wordsPerLesson = 100
+      const difficultWords = await Database.raw(`
+      select words.* from words right join (select word_id, count(id) as amount from answers where correct=false group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id limit 50;`)
+      const randomWordsAmount = wordsPerLesson - difficultWords.rows.length
+      const randomWords = await Database.raw(`
+      select * from words order by random() limit ?;`, [randomWordsAmount])
+      words = shuffle(difficultWords.rows.concat(randomWords.rows))
+    } else {
+      words = await Word.pick(wordsLimit)
+    }
 
     response.send(words)
   }

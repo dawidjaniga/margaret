@@ -15,27 +15,30 @@ const Word = use('App/Models/Word')
 const words = require('../files/words.json')
 
 class WordSeeder {
-  async run () {
-    const keys = Object.keys(words)
+  async run (wordsAmount) {
+    let wordsKeys = Object.keys(words)
 
-    const promises =
-    keys.map(async key => {
-      const wordData = words[key]
-      const word = new Word()
+    if (wordsAmount) {
+      wordsKeys = wordsKeys.slice(0, wordsAmount)
+    }
 
-      word.word = wordData.word
-      word.syllables = JSON.stringify(wordData.syllables)
-      word.syllables_amount = wordData.syllablesNum
-      word.stressed_syllable = wordData.stressedSyllable
-      word.ipa = wordData.IPA
-      word.definition = wordData.definition
-      word.speech_part = wordData.partOfSpeech
-      word.list = wordData.liste
+    await Promise.all(wordsKeys.map(this.createWord))
+  }
 
-      return word.save()
-    })
+  async createWord (key) {
+    const wordData = words[key]
+    const word = new Word()
 
-    await Promise.all(promises)
+    word.word = wordData.word
+    word.syllables = JSON.stringify(wordData.syllables)
+    word.syllables_amount = wordData.syllablesNum
+    word.stressed_syllable = wordData.stressedSyllable
+    word.ipa = wordData.IPA
+    word.definition = wordData.definition
+    word.speech_part = wordData.partOfSpeech
+    word.list = wordData.liste
+
+    return word.save()
   }
 }
 

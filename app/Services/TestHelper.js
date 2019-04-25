@@ -16,6 +16,10 @@ class TestHelper {
   static getUserToken () {
     return 'zxc123qwerty'
   }
+
+  static createWord () {
+
+  }
 }
 
 module.exports = TestHelper
