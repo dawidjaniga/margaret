@@ -10,15 +10,17 @@ const StyledSyllable = styled.span`
 font-size: 24px;
 display: inline-block;
 padding: 1em;
-cursor: pointer;
 transition: background .2s;
 border-bottom: 2px solid transparent;
-
+cursor: ${props => props.disableClick ? 'default' : 'pointer'};
 ${props => {
-    let result = `
-    &:hover {
-      border-bottom-color: #e1e1e1;
-    }`
+    let result
+
+    if (!props.disableClick) {
+      result = `&:hover {
+        border-bottom-color: #e1e1e1;
+      }`
+    }
 
     if (props.highlight) {
       result = `border-bottom-color: ${props.highlight === 'red' ? 'red' : '#1fe11fa1'}`
@@ -44,13 +46,19 @@ opacity: .2
 }
 `
 
-function Syllable ({ syllable, number, highlight, onClick }) {
+function Syllable ({ syllable, number, highlight, onClick, disableClick }) {
   const clickHandler = useCallback(() => {
     onClick(number)
   }, [number])
 
   return (
-    <StyledSyllable highlight={highlight} onClick={clickHandler}>{syllable}</StyledSyllable>
+    <StyledSyllable
+      highlight={highlight}
+      onClick={disableClick ? () => {} : clickHandler}
+      disableClick={disableClick}
+    >
+      {syllable}
+    </StyledSyllable>
   )
 }
 
@@ -61,7 +69,8 @@ export default function ({
   speechPart,
   definition,
   ipa,
-  onClick
+  onClick,
+  disableClick
 }) {
   return (
     <StyledWord>
@@ -82,6 +91,7 @@ export default function ({
             key={syllableNumber}
             number={syllableNumber}
             onClick={onClick}
+            disableClick={disableClick}
             syllable={syllable}
             highlight={color}
           />
