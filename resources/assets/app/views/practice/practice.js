@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Layout, Typography, Spin, Button, List, Progress } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
+import Combokeys from 'combokeys'
 import LayoutContent from '../../components/LayoutContent'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -69,6 +70,13 @@ export default class PracticeView extends Component {
     if (!this.state.wordsDownloaded) {
       this.loadWords()
     }
+
+    this.combokeys = new Combokeys(document.documentElement)
+    this.combokeys.bind('shift', this.onShiftPress)
+  }
+
+  componentWillUnmount() {
+    this.combokeys.unbind('shift')
   }
 
   loadWords () {
@@ -127,12 +135,15 @@ export default class PracticeView extends Component {
     }
   
   onClickNext = () => {
-    this.setState(
-      {
-        answeredSyllable: 0,
-      },
-      this.selectNextWord
-      )
+    if (!this.state.disableNextButtonClick) {
+      this.selectNextWord()
+    }
+  }
+
+  onShiftPress = () => {
+    if (!this.state.disableNextButtonClick) {
+      this.selectNextWord()
+    }
   }
 
   selectNextWord() {
@@ -141,6 +152,7 @@ export default class PracticeView extends Component {
 
     this.setState({
       words,
+      answeredSyllable: 0,
       currentWord: nextWord,
       disableWordClick: false,
       disableNextButtonClick: true,
