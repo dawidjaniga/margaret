@@ -1,6 +1,7 @@
 'use strict'
 const Word = use('App/Models/Word')
 const Answer = use('App/Models/Answer')
+const Database = use('Database')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -19,7 +20,25 @@ class AnswerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, auth }) {
+    const { filter = {} } = request.get()
+    let answers
+
+    if (filter.statistics === 'day') {
+      const query = await Database.raw(`
+      select
+      count(*) filter (where correct=true) as correct_answers,
+      count(*) filter (where correct=false) as incorrect_answers,
+      count(*) as answers_sum,
+      to_char( date_trunc('day', created_at), 'DD-MM-YYYY') as date
+      from answers
+      where user_id=? group by date;`,
+      [auth.user.id]
+      )
+      answers = query.rows
+    }
+
+    response.send(answers)
   }
 
   /**
