@@ -34,6 +34,18 @@ class WordController {
       const randomWords = await Database.raw(`
       select * from words order by random() limit ?;`, [randomWordsAmount])
       words = shuffle(difficultWords.rows.concat(randomWords.rows))
+    } else if (filter.answer === 'incorrect') {
+      const difficultWords = await Database.raw(`
+      select words.*, incorrectAnswers.amount from words right join (select word_id, count(id) as amount from answers where correct=false and user_id=? group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id order by amount desc limit ?;`,
+      [auth.user.id, wordsLimit]
+      )
+      words = difficultWords.rows
+    } else if (filter.answer === 'correct') {
+      const difficultWords = await Database.raw(`
+      select words.*, incorrectAnswers.amount from words right join (select word_id, count(id) as amount from answers where correct=true and user_id=? group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id order by amount desc limit ?;`,
+      [auth.user.id, wordsLimit]
+      )
+      words = difficultWords.rows
     } else {
       words = await Word.pick(wordsLimit)
     }
