@@ -4,6 +4,7 @@ import HomeView from './views/home/home'
 import LoginView from './views/login/login'
 import LoginSuccessView from './views/login/success'
 import PracticeView from './views/practice/practice'
+import ProgressView from './views/progress/progress'
 import { Provider, connect } from 'react-redux'
 import { createStore, combineReducers } from 'redux'
 import { createReducer } from 'redux-create-reducer'
@@ -74,6 +75,7 @@ class App extends Component {
         <Route path='/login' exact component={LoginView} />
         <Route path='/login-success' exact component={LoginSuccessView} />
         <Route path='/practice' exact component={PracticeView} />
+        <Route path='/progress' exact component={ProgressView} />
       </Router>
 
     )
