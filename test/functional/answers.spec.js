@@ -3,7 +3,6 @@
 const { test, trait } = use('Test/Suite')('Answers')
 const WordsSeeder = require('../../database/seeds/WordSeeder')
 const Word = use('App/Models/Word')
-const Answer = use('App/Models/Answer')
 const Database = use('Database')
 const TestHelper = use('App/Services/TestHelper')
 const random = require('lodash/random')
@@ -77,7 +76,8 @@ test('save answer with incorrect answer', async ({ client, assert }) => {
 
 test('get answers statistics per day', async ({ client, assert }) => {
   await Database.truncate('answers')
-  const createdWordsAmount = 200
+  await Database.truncate('words')
+  const createdWordsAmount = 40
   const user = await TestHelper.createUser()
   const wordsSeeder = new WordsSeeder()
   await wordsSeeder.run(createdWordsAmount)
@@ -93,25 +93,23 @@ test('get answers statistics per day', async ({ client, assert }) => {
     return words[index].id
   }
 
-  function randomDate (start, end) {
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()))
-  }
-
-  for (let i = 0; i <= 7; i++) {
+  for (let i = 6; i >= 0; i--) {
     const createdDate = subDays(new Date(), i)
     const formattedDate = format(createdDate, 'DD-MM-YYYY')
     let correct_answers = 0
     let incorrect_answers = 0
     let answers_sum = 0
 
-    range(0, 20).forEach(() => {
-      const answerResult = Math.round(Math.random())
-      answerPromises.push(Answer.create({
+    range(0, 5).forEach(() => {
+      const answerResult = !!Math.round(Math.random())
+      answerPromises.push(Database.table('answers').insert({
         word_id: getRandomWordId(),
         user_id: user.id,
+        answered_syllable: 1,
         correct: answerResult,
         created_at: createdDate
       }))
+
       answers_sum++
       if (answerResult) {
         correct_answers++
