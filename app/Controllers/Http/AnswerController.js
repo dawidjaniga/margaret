@@ -32,7 +32,9 @@ class AnswerController {
       count(*) as answers_sum,
       to_char( date_trunc('day', created_at), 'DD-MM-YYYY') as date
       from answers
-      where user_id=? group by date;`,
+      where user_id=?
+      group by date
+      order by date;`,
       [auth.user.id]
       )
       answers = query.rows

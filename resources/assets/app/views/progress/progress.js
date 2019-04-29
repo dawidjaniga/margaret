@@ -8,6 +8,35 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import Word from '../../components/Word'
 
+import { Line } from 'react-chartjs-2'
+
+const data = {
+  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  datasets: [
+    {
+      label: 'My First dataset',
+      fill: 'start',
+      lineTension: 0.1,
+      backgroundColor: 'rgba(75,192,192,0.4)',
+      borderColor: 'rgba(75,192,192,1)',
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: 'rgba(75,192,192,1)',
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      data: [65, 59, 80, 81, 56, 55, 40]
+    }
+  ]
+}
+
 const { Title } = Typography
 
 const Wrapper = styled.div`
@@ -18,22 +47,6 @@ const Wrapper = styled.div`
 `
 
 const ChartWrapper = styled.div`
-  margin: 5%;
-`
-
-const NextButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-const CurrentWordWrapper = styled.div`
-  width: 100%;
-`
-
-const CorrectAnswersRatioWrapper = styled.div`
-  width: 100%;
-  text-align: center;
   margin: 5%;
 `
 
@@ -52,36 +65,127 @@ export default class PracticeView extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      chartData: [],
-      correctAnswers: [],
-      incorrectAnswers: []
+      statisticsData: undefined,
+      easiestWords: [],
+      mostDifficultWords: []
     }
   }
 
   componentDidMount () {
-    if (!this.state.wordsDownloaded) {
-      this.loadWords()
+    if (!this.state.statisticsDownloaded) {
+      this.loadStatistics()
+      this.loadEasiestWords()
+      this.loadMostDifficultWords()
     }
   }
 
-  loadWords () {
+  createDataset (options) {
+    return {
+      fill: 'start',
+      lineTension: 0.1,
+      backgroundColor: '#60ea60ab',
+      borderColor: '#33c333ab',
+      borderCapStyle: 'butt',
+      borderDash: [],
+      borderDashOffset: 0.0,
+      borderJoinStyle: 'miter',
+      pointBorderColor: '#33c333ab',
+      pointBackgroundColor: '#fff',
+      pointBorderWidth: 1,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: '#33c333ab',
+      pointHoverBorderColor: 'rgba(220,220,220,1)',
+      pointHoverBorderWidth: 2,
+      pointRadius: 1,
+      pointHitRadius: 10,
+      ...options
+    }
+  }
+
+  loadStatistics () {
     this.setState({
       showLoader: true
     })
 
     axios
-      .get(`${APP_URL}/words?filter[level]=difficult`)
+      .get(`${APP_URL}/answers?filter[statistics]=day`)
       .then(response => {
-        setTimeout(() => {
-          this.setState(
-            {
-              words: response.data,
-              wordsDownloaded: true,
-              showLoader: false
-            },
-            this.selectNextWord
-          )
-        }, 200)
+        const correctAnswersRatio = []
+        const answersSum = []
+        const labels = []
+        response.data.forEach(item => {
+          const correct = parseInt(item.correct_answers, 10)
+          const incorrect = parseInt(item.incorrect_answers, 10)
+          const sum = correct + incorrect
+          const ratio = correct / sum * 100
+
+          correctAnswersRatio.push(ratio)
+          answersSum.push(sum)
+          labels.push(item.date)
+        })
+        this.setState({
+          statisticsData: {
+            labels,
+            datasets: [
+              this.createDataset({
+                label: 'Correct ratio',
+                data: correctAnswersRatio,
+                backgroundColor: '#60ea60ab',
+                borderColor: '#33c333ab',
+                pointBorderColor: '#33c333ab'
+              }),
+              this.createDataset({
+                label: 'Answers sum',
+                data: answersSum,
+                backgroundColor: '#4978ff47',
+                borderColor: '#4978ff8c',
+                pointBorderColor: '#4978ff8c'
+              })
+            ]
+          },
+          statisticsDownloaded: true,
+          showLoader: false
+        })
+      })
+      .catch(err => {
+        this.setState({
+          showLoader: false
+        })
+        console.error(err)
+      })
+  }
+
+  loadEasiestWords () {
+    this.setState({
+      showLoader: true
+    })
+
+    axios
+      .get(`${APP_URL}/words?filter[answer]=correct&limit=30`)
+      .then(response => {
+        this.setState({
+          easiestWords: response.data.map(item => item.word)
+        })
+      })
+      .catch(err => {
+        this.setState({
+          showLoader: false
+        })
+        console.error(err)
+      })
+  }
+
+  loadMostDifficultWords () {
+    this.setState({
+      showLoader: true
+    })
+
+    axios
+      .get(`${APP_URL}/words?filter[answer]=incorrect&limit=30`)
+      .then(response => {
+        this.setState({
+          mostDifficultWords: response.data.map(item => item.word)
+        })
       })
       .catch(err => {
         this.setState({
@@ -93,8 +197,9 @@ export default class PracticeView extends Component {
 
   render () {
     const {
-      correctAnswers,
-      incorrectAnswers
+      statisticsData,
+      easiestWords,
+      mostDifficultWords
     } = this.state
 
     return (
@@ -102,28 +207,30 @@ export default class PracticeView extends Component {
         <Header />
         <LayoutContent>
           <Title level={1}>Progress</Title>
-          <ChartWrapper />
+          <ChartWrapper>
+            {statisticsData && <Line data={statisticsData} />}
+          </ChartWrapper>
           <Wrapper>
             {this.state.showLoader && <Spin />}
-            <CurrentWordWrapper />
             <WordListWrapper>
               <List
                 header={
-                  <WordListHeader>✅ {correctAnswers.length}</WordListHeader>
+                  <WordListHeader>❌ {mostDifficultWords.length}</WordListHeader>
                 }
-                dataSource={correctAnswers}
+                dataSource={mostDifficultWords}
                 renderItem={item => <List.Item>{item}</List.Item>}
               />
             </WordListWrapper>
             <WordListWrapper>
               <List
                 header={
-                  <WordListHeader>❌ {incorrectAnswers.length}</WordListHeader>
+                  <WordListHeader>✅ {easiestWords.length}</WordListHeader>
                 }
-                dataSource={incorrectAnswers}
+                dataSource={easiestWords}
                 renderItem={item => <List.Item>{item}</List.Item>}
               />
             </WordListWrapper>
+
           </Wrapper>
         </LayoutContent>
         <Footer />
