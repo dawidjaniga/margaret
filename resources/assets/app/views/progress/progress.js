@@ -128,18 +128,20 @@ export default class PracticeView extends Component {
             labels,
             datasets: [
               this.createDataset({
-                label: 'Correct ratio',
-                data: correctAnswersRatio,
-                backgroundColor: '#60ea60ab',
-                borderColor: '#33c333ab',
-                pointBorderColor: '#33c333ab'
-              }),
-              this.createDataset({
                 label: 'Answers sum',
                 data: answersSum,
                 backgroundColor: '#4978ff47',
                 borderColor: '#4978ff8c',
-                pointBorderColor: '#4978ff8c'
+                pointBorderColor: '#4978ff8c',
+                yAxisID: 'answers sum'
+              }),
+              this.createDataset({
+                label: 'Correct ratio',
+                data: correctAnswersRatio,
+                backgroundColor: '#60ea60ab',
+                borderColor: '#33c333ab',
+                pointBorderColor: '#33c333ab',
+                yAxisID: 'correct ratio'
               })
             ]
           },
@@ -202,13 +204,34 @@ export default class PracticeView extends Component {
       mostDifficultWords
     } = this.state
 
+    const chartOptions = {
+      scales: {
+        yAxes: [
+          {
+            id: 'answers sum',
+            type: 'linear',
+            position: 'left'
+          },
+          {
+            id: 'correct ratio',
+            type: 'linear',
+            position: 'right',
+            ticks: {
+              min: 0,
+              max: 100
+            }
+          }
+        ]
+      }
+    }
+
     return (
       <Layout className='layout'>
         <Header />
         <LayoutContent>
           <Title level={1}>Progress</Title>
           <ChartWrapper>
-            {statisticsData && <Line data={statisticsData} />}
+            {statisticsData && <Line data={statisticsData} options={chartOptions} />}
           </ChartWrapper>
           <Wrapper>
             {this.state.showLoader && <Spin />}
