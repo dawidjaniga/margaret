@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import HomeView from './views/home/home'
 import LoginView from './views/login/login'
 import LoginSuccessView from './views/login/success'
+import RulesView from './views/rules/rules'
 import PracticeView from './views/practice/practice'
 import ProgressView from './views/progress/progress'
 import { Provider, connect } from 'react-redux'
@@ -74,6 +75,7 @@ class App extends Component {
         <Route path='/' exact component={HomeView} />
         <Route path='/login' exact component={LoginView} />
         <Route path='/login-success' exact component={LoginSuccessView} />
+        <Route path='/rules' exact component={RulesView} />
         <Route path='/practice' exact component={PracticeView} />
         <Route path='/progress' exact component={ProgressView} />
       </Router>
