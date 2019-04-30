@@ -1,8 +1,14 @@
 'use strict'
 
 const { test, trait } = use('Test/Suite')('Answers')
+const WordsSeeder = require('../../database/seeds/WordSeeder')
 const Word = use('App/Models/Word')
+const Database = use('Database')
 const TestHelper = use('App/Services/TestHelper')
+const random = require('lodash/random')
+const range = require('lodash/range')
+const format = require('date-fns/format')
+const subDays = require('date-fns/sub_days')
 
 trait('Auth/Client')
 trait('Session/Client')
@@ -66,6 +72,68 @@ test('save answer with incorrect answer', async ({ client, assert }) => {
   assert.equal(answer.word_id, word.id)
   assert.equal(answer.answered_syllable, answeredSyllable)
   assert.equal(answer.correct, false)
+})
+
+test('get answers statistics per day', async ({ client, assert }) => {
+  await Database.truncate('answers')
+  await Database.truncate('words')
+  const createdWordsAmount = 40
+  const user = await TestHelper.createUser()
+  const wordsSeeder = new WordsSeeder()
+  await wordsSeeder.run(createdWordsAmount)
+  const words = await Database
+    .select('id')
+    .from('words')
+    .orderByRaw('RANDOM()')
+    .limit(100)
+  const statistics = []
+  const answerPromises = []
+  const getRandomWordId = function () {
+    const index = random(0, words.length - 1)
+    return words[index].id
+  }
+
+  for (let i = 6; i >= 0; i--) {
+    const createdDate = subDays(new Date(), i)
+    const formattedDate = format(createdDate, 'DD-MM-YYYY')
+    let correct_answers = 0
+    let incorrect_answers = 0
+    let answers_sum = 0
+
+    range(0, 5).forEach(() => {
+      const answerResult = !!Math.round(Math.random())
+      answerPromises.push(Database.table('answers').insert({
+        word_id: getRandomWordId(),
+        user_id: user.id,
+        answered_syllable: 1,
+        correct: answerResult,
+        created_at: createdDate
+      }))
+
+      answers_sum++
+      if (answerResult) {
+        correct_answers++
+      } else {
+        incorrect_answers++
+      }
+    })
+
+    statistics.push({
+      date: formattedDate,
+      correct_answers: correct_answers + '',
+      incorrect_answers: incorrect_answers + '',
+      answers_sum: answers_sum + ''
+    })
+  }
+
+  await Promise.all(answerPromises)
+
+  const response = await client
+    .get(`/answers?filter[statistics]=day`)
+    .loginVia(user)
+    .end()
+  response.assertStatus(200)
+  assert.deepEqual(response.body, statistics)
 })
 
 test('throw error when saving incorrectly build answer', async ({ client, assert }) => {

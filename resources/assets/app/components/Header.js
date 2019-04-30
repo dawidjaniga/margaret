@@ -21,6 +21,9 @@ export default function () {
         <Menu.Item key='3'>
           <Link to='/practice'>Practice</Link>
         </Menu.Item>
+        <Menu.Item key='4'>
+          <Link to='/progress'>Progress</Link>
+        </Menu.Item>
       </Menu>
     </Header>
   )
