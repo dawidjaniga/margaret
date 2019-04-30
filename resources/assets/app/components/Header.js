@@ -3,6 +3,29 @@ import { Link } from 'react-router-dom'
 import { Layout, Menu } from 'antd'
 const { Header } = Layout
 
+const items = [
+  {
+    name: 'Home',
+    href: '/'
+  },
+  {
+    name: 'Login',
+    href: '/login'
+  },
+  {
+    name: 'Rules',
+    href: '/rules'
+  },
+  {
+    name: 'Practice',
+    href: '/practice'
+  },
+  {
+    name: 'Progress',
+    href: '/progress'
+  }
+]
+
 export default function () {
   return (
     <Header>
@@ -12,18 +35,10 @@ export default function () {
         mode='horizontal'
         style={{ lineHeight: '64px' }}
       >
-        <Menu.Item key='1'>
-          <Link to='/'>Home</Link>
-        </Menu.Item>
-        <Menu.Item key='2'>
-          <Link to='/login'>Login</Link>
-        </Menu.Item>
-        <Menu.Item key='3'>
-          <Link to='/practice'>Practice</Link>
-        </Menu.Item>
-        <Menu.Item key='4'>
-          <Link to='/progress'>Progress</Link>
-        </Menu.Item>
+        {items.map((item, index) =>
+          <Menu.Item key={index}>
+            <Link to={item.href}>{item.name}</Link>
+          </Menu.Item>)}
       </Menu>
     </Header>
   )
