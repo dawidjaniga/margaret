@@ -33,8 +33,8 @@ class AnswerController {
       to_char( date_trunc('day', created_at), 'DD-MM-YYYY') as date
       from answers
       where user_id=?
-      group by date
-      order by date;`,
+      group by date, created_at
+      order by created_at;`,
       [auth.user.id]
       )
       answers = query.rows
