@@ -60,6 +60,7 @@ class WordController {
         ) user_answers
         on words.id = user_answers.word_id
         where user_answers.word_id is null
+        order by random()
       limit ?;
         `,
       [auth.user.id, wordsLimit])
