@@ -95,7 +95,7 @@ test('get answers statistics per day', async ({ client, assert }) => {
 
   for (let i = 6; i >= 0; i--) {
     const createdDate = subDays(new Date(), i)
-    const formattedDate = format(createdDate, 'DD-MM-YYYY')
+    const formattedDate = format(createdDate, 'YYYY-MM-DD')
     let correct_answers = 0
     let incorrect_answers = 0
     let answers_sum = 0

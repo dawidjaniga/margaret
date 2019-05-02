@@ -6,8 +6,11 @@ const WordsSeeder = require('../../database/seeds/WordSeeder')
 const Answer = use('App/Models/Answer')
 const config = use('Config').get('words')
 const Database = use('Database')
+const random = require('lodash/random')
 const range = require('lodash/range')
 const shuffle = require('lodash/shuffle')
+const subDays = require('date-fns/sub_days')
+const isBefore = require('date-fns/is_before')
 
 trait('Auth/Client')
 trait('Session/Client')
@@ -38,8 +41,7 @@ test('get 100 words', async ({ client, assert }) => {
 
 test('get the most difficult words to learn', async ({ client, assert }) => {
   await Database.truncate('answers')
-  const wordsPerLesson = 100
-  const maximumDifficultWordsAmount = 50
+  const wordsPerLesson = 50
   const createdWordsAmount = 200
   const user = await TestHelper.createUser()
   const wordsSeeder = new WordsSeeder()
@@ -48,26 +50,94 @@ test('get the most difficult words to learn', async ({ client, assert }) => {
     .select('id')
     .from('words')
     .orderByRaw('RANDOM()')
-    .limit(maximumDifficultWordsAmount)
-  const wordsIdsWithIncorrectAnswers = []
+    .limit(wordsPerLesson)
+  const wordsAnswers = {}
+  const answerPromises = []
+  const yesterdayDate = subDays(new Date(), 1)
 
   await Promise.all(words.map(word => {
-    wordsIdsWithIncorrectAnswers.push(word.id)
-    return Answer.create({
-      word_id: word.id,
-      user_id: user.id,
-      correct: false
+    range(0, random(5, 10)).forEach(() => {
+      const createdDate = subDays(new Date(), random(0, 4))
+      const answerResult = !!Math.round(Math.random())
+      answerPromises.push(Database.table('answers').insert({
+        word_id: word.id,
+        user_id: user.id,
+        answered_syllable: 1,
+        correct: answerResult,
+        created_at: createdDate
+      }))
+
+      if (isBefore(createdDate, yesterdayDate)) {
+        if (!wordsAnswers[word.id]) {
+          wordsAnswers[word.id] = {
+            id: word.id,
+            correct: 0,
+            sum: 0,
+            ratio: 0
+          }
+        }
+
+        if (answerResult) {
+          wordsAnswers[word.id].correct += 1
+        }
+
+        wordsAnswers[word.id].sum += 1
+        wordsAnswers[word.id].ratio = wordsAnswers[word.id].correct / wordsAnswers[word.id].sum
+      }
     })
   }))
 
+  await Promise.all(answerPromises)
+
   const response = await client
-    .get(`/words?filter[level]=difficult`)
+    .get(`/words?filter[level]=difficult&limit=${wordsPerLesson}`)
     .loginVia(user)
     .end()
   const difficultWordsIds = response.body.map(word => word.id)
+  const wordsRatioIds = Object.values(wordsAnswers)
+    .sort((a, b) => a.ratio - b.ratio)
+    .map(item => item.id)
   response.assertStatus(200)
-  assert.equal(response.body.length, wordsPerLesson)
-  assert.includeMembers(difficultWordsIds, wordsIdsWithIncorrectAnswers)
+  assert.isAtMost(response.body.length, wordsPerLesson)
+  assert.includeMembers(difficultWordsIds, wordsRatioIds)
+})
+
+test('get new words', async ({ client, assert }) => {
+  await Database.truncate('answers')
+  const wordsPerLesson = 50
+  const createdWordsAmount = 200
+  const user = await TestHelper.createUser()
+  const wordsSeeder = new WordsSeeder()
+  await wordsSeeder.run(createdWordsAmount)
+  const words = await Database
+    .select('id')
+    .from('words')
+    .orderByRaw('RANDOM()')
+    .limit(wordsPerLesson)
+  const wordsWithAnswersIds = []
+  const answerPromises = []
+
+  await Promise.all(words.map(word => {
+    answerPromises.push(Database.table('answers').insert({
+      word_id: word.id,
+      user_id: user.id,
+      answered_syllable: 1,
+      correct: true
+    }))
+
+    wordsWithAnswersIds.push(word.id)
+  }))
+
+  await Promise.all(answerPromises)
+
+  const response = await client
+    .get(`/words?filter[status]=new&limit=${wordsPerLesson}`)
+    .loginVia(user)
+    .end()
+  const newWordsIds = response.body.map(word => word.id)
+  response.assertStatus(200)
+  assert.isAtMost(response.body.length, wordsPerLesson)
+  assert.notIncludeMembers(newWordsIds, wordsWithAnswersIds)
 })
 
 test('get top 10 incorrect words', async ({ client, assert }) => {

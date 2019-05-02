@@ -27,13 +27,44 @@ class WordController {
     let words
 
     if (filter.level === 'difficult') {
-      const wordsPerLesson = 100
       const difficultWords = await Database.raw(`
-      select words.* from words right join (select word_id, count(id) as amount from answers where correct=false group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id limit 50;`)
-      const randomWordsAmount = wordsPerLesson - difficultWords.rows.length
-      const randomWords = await Database.raw(`
-      select * from words order by random() limit ?;`, [randomWordsAmount])
-      words = shuffle(difficultWords.rows.concat(randomWords.rows))
+      select
+      w.*
+      from (
+        select
+        word_id,
+        count(*) filter (where correct=true) as correct_answers,
+        count(*) filter (where correct=false) as incorrect_answers
+        from answers
+        where
+          user_id=?
+          and
+          created_at < now() - interval '1 day'
+        group by word_id
+      ) as b
+      left join words w on w.id = b.word_id
+      order by incorrect_answers::float / (correct_answers + incorrect_answers) desc
+      limit ?;
+      `,
+      [auth.user.id, wordsLimit])
+      words = shuffle(difficultWords.rows)
+    } else if (filter.status === 'new') {
+      const newWords = await Database.raw(`
+      select words.*
+      from words
+      left join
+        (
+          select word_id
+          from answers
+          where user_id=?
+        ) user_answers
+        on words.id = user_answers.word_id
+        where user_answers.word_id is null
+        order by random()
+      limit ?;
+        `,
+      [auth.user.id, wordsLimit])
+      words = shuffle(newWords.rows)
     } else if (filter.answer === 'incorrect') {
       const difficultWords = await Database.raw(`
       select words.*, incorrectAnswers.amount from words right join (select word_id, count(id) as amount from answers where correct=false and user_id=? group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id order by amount desc limit ?;`,
