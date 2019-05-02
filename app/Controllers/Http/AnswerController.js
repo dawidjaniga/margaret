@@ -30,11 +30,11 @@ class AnswerController {
       count(*) filter (where correct=true) as correct_answers,
       count(*) filter (where correct=false) as incorrect_answers,
       count(*) as answers_sum,
-      to_char( date_trunc('day', created_at), 'DD-MM-YYYY') as date
+      to_char( date_trunc('day', created_at), 'YYYY-MM-DD') as date
       from answers
       where user_id=?
-      group by date, created_at
-      order by created_at;`,
+      group by date
+      order by date;`,
       [auth.user.id]
       )
       answers = query.rows
