@@ -48,6 +48,22 @@ class WordController {
       `,
       [auth.user.id, wordsLimit])
       words = shuffle(difficultWords.rows)
+    } else if (filter.status === 'new') {
+      const newWords = await Database.raw(`
+      select words.*
+      from words
+      left join
+        (
+          select word_id
+          from answers
+          where user_id=?
+        ) user_answers
+        on words.id = user_answers.word_id
+        where user_answers.word_id is null
+      limit ?;
+        `,
+      [auth.user.id, wordsLimit])
+      words = shuffle(newWords.rows)
     } else if (filter.answer === 'incorrect') {
       const difficultWords = await Database.raw(`
       select words.*, incorrectAnswers.amount from words right join (select word_id, count(id) as amount from answers where correct=false and user_id=? group by word_id, correct order by amount desc) as incorrectAnswers on words.id=incorrectAnswers.word_id order by amount desc limit ?;`,

@@ -84,7 +84,7 @@ export default class PracticeView extends Component {
       showLoader: true
     })
 
-    axios.get(`${APP_URL}/words?filter[level]=difficult`)
+    axios.get(`${APP_URL}/words?filter[level]=difficult&limit=100`)
       .then(response => {
         setTimeout(() => {
           this.setState({
