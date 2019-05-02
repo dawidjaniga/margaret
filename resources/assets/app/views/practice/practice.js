@@ -3,6 +3,7 @@ import { Layout, Typography, Spin, Button, List, Progress } from 'antd'
 import styled from 'styled-components'
 import axios from 'axios'
 import Combokeys from 'combokeys'
+import shuffle from 'lodash/shuffle'
 import LayoutContent from '../../components/LayoutContent'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
@@ -84,17 +85,18 @@ export default class PracticeView extends Component {
       showLoader: true
     })
 
-    axios.get(`${APP_URL}/words?filter[level]=difficult&limit=100`)
-      .then(response => {
-        setTimeout(() => {
-          this.setState({
-            words: response.data,
-            wordsDownloaded: true,
-            showLoader: false
-          },
-          this.selectNextWord)
-        }, 200)
-      })
+    const getDifficultWords = axios.get(`${APP_URL}/words?filter[level]=difficult&limit=50`)
+    const getNewWords = axios.get(`${APP_URL}/words?filter[status]=new&limit=50`)
+    Promise.all([getDifficultWords, getNewWords])
+    .then(values => {
+      const words = shuffle(values.map(response => response.data).flat())
+      this.setState({
+        words,
+        wordsDownloaded: true,
+        showLoader: false
+      },
+      this.selectNextWord)
+    })
       .catch(err => {
         this.setState({
           showLoader: false
@@ -193,59 +195,62 @@ export default class PracticeView extends Component {
         <LayoutContent>
           <Title level={1}>Practice</Title>
           <ProgressWrapper>
-          <Progress
-            type="line"
-            strokeColor={{
-              '0%': '#6ded4a',
-              '100%': '#53c423',
-            }}
-            percent={progress}
-            status="active"
-            format={() => `${100 - words.length} / 100`}
-          />
-          </ProgressWrapper>
-          <Wrapper>
-            {this.state.showLoader && <Spin />}
-            <CurrentWordWrapper>
-            {currentWord &&
-            <Word
-              syllables={currentWord.syllables}
-              stressedSyllable={currentWord.stressed_syllable}
-              answeredSyllable={answeredSyllable}
-              speechPart={currentWord.speech_part}
-              definition={currentWord.definition}
-              ipa={currentWord.ipa}
-              onClick={this.onClickWord}
-              disableClick={disableWordClick}
-            />
-            }
-            </CurrentWordWrapper>
-            <NextButtonWrapper>
-              <Button type="primary" icon="double-right" onClick={this.onClickNext} disabled={disableNextButtonClick}>Next</Button>
-            </NextButtonWrapper>
-            <CorrectAnswersRatioWrapper>
-            <Progress
-              type="circle"
-              width={100}
-              percent={correctAnswersRatio}
-              format={() => `${correctAnswersRatio}%`}
-            />
-            </CorrectAnswersRatioWrapper>
-            <WordListWrapper>
-            <List
-              header={<WordListHeader>✅ {correctAnswers.length}</WordListHeader>}
-              dataSource={correctAnswers}
-              renderItem={item => (<List.Item>{item}</List.Item>)}
-            />
-            </WordListWrapper>
-            <WordListWrapper>
-            <List
-              header={<WordListHeader>❌ {incorrectAnswers.length}</WordListHeader>}
-              dataSource={incorrectAnswers}
-              renderItem={item => (<List.Item>{item}</List.Item>)}
-            />
-            </WordListWrapper>
-          </Wrapper>
+                <Progress
+                  type="line"
+                  strokeColor={{
+                    '0%': '#6ded4a',
+                    '100%': '#53c423',
+                  }}
+                  percent={progress}
+                  status="active"
+                  format={() => `${100 - words.length} / 100`}
+                />
+              </ProgressWrapper>
+          {this.state.showLoader
+            ? <Spin />
+            :
+            <Wrapper>
+              <CurrentWordWrapper>
+              {currentWord &&
+              <Word
+                syllables={currentWord.syllables}
+                stressedSyllable={currentWord.stressed_syllable}
+                answeredSyllable={answeredSyllable}
+                speechPart={currentWord.speech_part}
+                definition={currentWord.definition}
+                ipa={currentWord.ipa}
+                onClick={this.onClickWord}
+                disableClick={disableWordClick}
+              />
+              }
+              </CurrentWordWrapper>
+              <NextButtonWrapper>
+                <Button type="primary" icon="double-right" onClick={this.onClickNext} disabled={disableNextButtonClick}>Next</Button>
+              </NextButtonWrapper>
+              <CorrectAnswersRatioWrapper>
+              <Progress
+                type="circle"
+                width={100}
+                percent={correctAnswersRatio}
+                format={() => `${correctAnswersRatio}%`}
+              />
+              </CorrectAnswersRatioWrapper>
+              <WordListWrapper>
+              <List
+                header={<WordListHeader>✅ {correctAnswers.length}</WordListHeader>}
+                dataSource={correctAnswers}
+                renderItem={item => (<List.Item>{item}</List.Item>)}
+              />
+              </WordListWrapper>
+              <WordListWrapper>
+              <List
+                header={<WordListHeader>❌ {incorrectAnswers.length}</WordListHeader>}
+                dataSource={incorrectAnswers}
+                renderItem={item => (<List.Item>{item}</List.Item>)}
+              />
+              </WordListWrapper>
+            </Wrapper>
+          }
         </LayoutContent>
         <Footer />
       </Layout>
