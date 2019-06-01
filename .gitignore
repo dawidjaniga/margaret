@@ -17,3 +17,6 @@ database/development.sqlite
 
 # Error log
 yarn-error.log
+
+# macOS Desktop Services file
+.DS_Store
