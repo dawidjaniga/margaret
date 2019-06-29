@@ -68,7 +68,7 @@ test('save answer with incorrect answer', async ({ client, assert }) => {
   assert.equal(answer.correct, false)
 })
 
-test('get answers statistics per day', async ({ client, assert }) => {
+test('get answers statistics per day for user', async ({ client, assert }) => {
   await Database.truncate('answers')
   await Database.truncate('words')
   const createdWordsAmount = 40
@@ -124,8 +124,74 @@ test('get answers statistics per day', async ({ client, assert }) => {
   await Promise.all(answerPromises)
 
   const response = await client
-    .get(`/answers?filter[statistics]=day`)
+    .get(`/answers?filter[statistics]=user-day`)
     .loginVia(user)
+    .end()
+  response.assertStatus(200)
+  assert.deepEqual(response.body, statistics)
+})
+
+test('get answers statistics per day ', async ({ client, assert }) => {
+  await Database.truncate('answers')
+  await Database.truncate('words')
+  const createdWordsAmount = 40
+  const user1 = await TestHelper.createUser()
+  const user2 = await TestHelper.createUser({
+    email: 'noone@gmail.com'
+  })
+  const wordsSeeder = new WordsSeeder()
+  await wordsSeeder.run(createdWordsAmount)
+  const words = await Database.select('id')
+    .from('words')
+    .orderByRaw('RANDOM()')
+    .limit(100)
+  const statistics = []
+  const answerPromises = []
+  const getRandomWordId = function () {
+    const index = random(0, words.length - 1)
+    return words[index].id
+  }
+
+  for (let i = 6; i >= 0; i--) {
+    const createdDate = subDays(new Date(), i)
+    const formattedDate = format(createdDate, 'YYYY-MM-DD')
+    let correctAnswers = 0
+    let incorrectAnswers = 0
+    let answersSum = 0
+
+    range(0, 5).forEach(() => {
+      const answerResult = !!Math.round(Math.random())
+      answerPromises.push(
+        Database.table('answers').insert({
+          word_id: getRandomWordId(),
+          user_id: (answerResult ? user1 : user2).id,
+          answered_syllable: 1,
+          correct: answerResult,
+          created_at: createdDate
+        })
+      )
+
+      answersSum++
+      if (answerResult) {
+        correctAnswers++
+      } else {
+        incorrectAnswers++
+      }
+    })
+
+    statistics.push({
+      date: formattedDate,
+      correct_answers: correctAnswers + '',
+      incorrect_answers: incorrectAnswers + '',
+      answers_sum: answersSum + ''
+    })
+  }
+
+  await Promise.all(answerPromises)
+
+  const response = await client
+    .get(`/answers?filter[statistics]=day`)
+    .loginVia(user1)
     .end()
   response.assertStatus(200)
   assert.deepEqual(response.body, statistics)

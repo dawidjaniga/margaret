@@ -24,8 +24,9 @@ class AnswerController {
     const { filter = {} } = request.get()
     let answers
 
-    if (filter.statistics === 'day') {
-      const query = await Database.raw(`
+    if (filter.statistics === 'user-day') {
+      const query = await Database.raw(
+        `
       select
       count(*) filter (where correct=true) as correct_answers,
       count(*) filter (where correct=false) as incorrect_answers,
@@ -35,7 +36,20 @@ class AnswerController {
       where user_id=?
       group by date
       order by date;`,
-      [auth.user.id]
+        [auth.user.id]
+      )
+      answers = query.rows
+    } else if (filter.statistics === 'day') {
+      const query = await Database.raw(
+        `
+      select
+      count(*) filter (where correct=true) as correct_answers,
+      count(*) filter (where correct=false) as incorrect_answers,
+      count(*) as answers_sum,
+      to_char( date_trunc('day', created_at), 'YYYY-MM-DD') as date
+      from answers
+      group by date
+      order by date;`
       )
       answers = query.rows
     }
@@ -85,8 +99,7 @@ class AnswerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-  }
+  async show ({ params, request, response, view }) {}
 
   /**
    * Update answer details.
@@ -96,8 +109,7 @@ class AnswerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
-  }
+  async update ({ params, request, response }) {}
 
   /**
    * Delete a answer with id.
@@ -107,8 +119,7 @@ class AnswerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-  }
+  async destroy ({ params, request, response }) {}
 }
 
 module.exports = AnswerController

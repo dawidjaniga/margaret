@@ -2,9 +2,9 @@
 const User = use('App/Models/User')
 
 class TestHelper {
-  static createUser () {
+  static createUser ({ email } = {}) {
     return User.create({
-      email: TestHelper.getUserEmail(),
+      email: email || TestHelper.getUserEmail(),
       token: TestHelper.getUserToken()
     })
   }
@@ -17,9 +17,7 @@ class TestHelper {
     return 'zxc123qwerty'
   }
 
-  static createWord () {
-
-  }
+  static createWord () {}
 }
 
 module.exports = TestHelper
