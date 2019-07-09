@@ -25,6 +25,12 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: ['babel-loader', 'react-hot-loader/webpack']
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: [
+          'file-loader'
+        ]
       }
     ]
   },

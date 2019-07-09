@@ -11,7 +11,7 @@ text-align: center;
 export default function () {
   return (
     <StyledFooter>
-      Margaret ©2018 Created by <a href='https://dawidjaniga.pl'>Dawid Janiga</a>
+      Margaret ©2019 Created by <a href='https://dawidjaniga.pl'>Dawid Janiga</a>
     </StyledFooter>
   )
 }
