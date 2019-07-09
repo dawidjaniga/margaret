@@ -39,7 +39,10 @@ const Definition = styled.dfn`
 font-size: 10px;
 display: block;
 margin: 1em 0;
-opacity: .2
+opacity: .2;
+${({ hide }) => hide && `
+  visibility: hidden;
+`}
 
 &:hover {
   opacity: .5;
@@ -100,7 +103,7 @@ export default function ({
       }
       <SpeechPart>{speechPart}</SpeechPart>
       <Definition>{definition}</Definition>
-      <Definition>{ipa}</Definition>
+      <Definition hide={!answeredSyllable}>{ipa}</Definition>
     </StyledWord>
   )
 }
