@@ -1,5 +1,7 @@
 # Adonis fullstack application
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/dawidjaniga/margaret.svg)](https://greenkeeper.io/)
+
 This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
 
 1. Bodyparser
