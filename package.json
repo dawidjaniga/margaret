@@ -34,7 +34,7 @@
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/vow": "1.0.17",
     "@hot-loader/react-dom": "16.8.6",
-    "antd": "3.19.7",
+    "antd": "3.23.2",
     "axios": "0.19.0",
     "combokeys": "3.0.1",
     "date-fns": "1.30.1",
