@@ -2607,10 +2607,10 @@ charm@~0.1.1:
   resolved "https://registry.yarnpkg.com/charm/-/charm-0.1.2.tgz#06c21eed1a1b06aeb67553cdc53e23274bac2296"
   integrity sha1-BsIe7RobBq62dVPNxT4jJ0usIpY=
 
-chart.js@2.9.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.0.tgz#ebd700719922ba4963c84a4792f7af88e3a4840c"
-  integrity sha512-qgbY2tObinNst84qlWYiNTvszJSKoyoYiOjqOztUaW88N+Xk7QFJ9PasO+w0G1+NkxJzKzun7kUSZd7oWLCIDQ==
+chart.js@2.9.3:
+  version "2.9.3"
+  resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-2.9.3.tgz#ae3884114dafd381bc600f5b35a189138aac1ef7"
+  integrity sha512-+2jlOobSk52c1VU6fzkh3UwqHMdSlgH1xFv9FKMqHiNCpXsGPQa/+81AFa+i3jZ253Mq9aAycPwDjnn1XbRNNw==
   dependencies:
     chartjs-color "^2.1.0"
     moment "^2.10.2"
