@@ -35,10 +35,10 @@
     oauth "^0.9.15"
     uuid "^3.3.2"
 
-"@adonisjs/auth@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@adonisjs/auth/-/auth-3.0.7.tgz#e18ed04b003acbb24ad0f4a86ab82cecc6fca5b1"
-  integrity sha512-ui7cSTNmxO+8r3iaA9ZQOtgzXwHshg/XFHH1OR7tUELHUUyInoPaRqLofb+5KpjYZ1U9RrZC6eT+sTUQzzxk+Q==
+"@adonisjs/auth@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@adonisjs/auth/-/auth-3.1.0.tgz#039c2bd60d959d3bb5e6e49ec29825ad54b165d8"
+  integrity sha512-NLy0Jjmb7/Vmh5GvL7ma8qrSoC8oW32lcz6T5FRDMnXFs59pfBS0Mej0Try6iY/aGGFMKiLVVOoGzhgWgeX8eA==
   dependencies:
     "@adonisjs/generic-exceptions" "^2.0.1"
     basic-auth "^2.0.1"
