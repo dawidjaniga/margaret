@@ -76,7 +76,7 @@
     "node-sass": "4.13.0",
     "plop": "2.4.0",
     "react": "16.9.0",
-    "react-chartjs-2": "2.7.6",
+    "react-chartjs-2": "2.8.0",
     "react-dom": "16.9.0",
     "webpack": "4.41.3",
     "webpack-cli": "3.3.6",
