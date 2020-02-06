@@ -77,8 +77,8 @@
     "plop": "2.4.0",
     "react": "16.9.0",
     "react-chartjs-2": "2.7.6",
+    "webpack": "4.41.3",
     "react-dom": "16.9.0",
-    "webpack": "4.35.0",
     "webpack-cli": "3.3.4",
     "webpack-dev-server": "3.7.2",
     "webpack-merge": "4.2.1"
