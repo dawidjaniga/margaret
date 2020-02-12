@@ -155,13 +155,13 @@
     haye "^2.0.1"
     lodash "^4.17.5"
 
-"@adonisjs/session@^1.0.27":
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/@adonisjs/session/-/session-1.0.28.tgz#626baee438cd1546d88838f98c1ada226c40a7c5"
-  integrity sha512-hr44JVYxsqy/yY5vRVS/XV6sPP06UR1WFiJ7cqcwv+fR+tufW3wboadMa6Rqk0e4wMx01bUJgmsl+tqcXdTUug==
+"@adonisjs/session@^1.0.29":
+  version "1.0.29"
+  resolved "https://registry.yarnpkg.com/@adonisjs/session/-/session-1.0.29.tgz#4f397d28afe2c20ba88b1c1d431c56b783461ed6"
+  integrity sha512-dr8P/WUrt50uLZt5SZ8C1uhp4FXzGPh1dNUeS0Lur95ftzHri6S+suBXQ4DM+sNiZQn7iaVylYwsFqUlOkp8gQ==
   dependencies:
     "@adonisjs/generic-exceptions" "^2.0.1"
-    bson "^4.0.0-rc5"
+    bson "^1.1.0"
     debug "^4.1.0"
     fs-extra "^7.0.0"
     lodash "^4.17.11"
@@ -2515,13 +2515,10 @@ browserslist@^4.6.0, browserslist@^4.6.2:
     electron-to-chromium "^1.3.164"
     node-releases "^1.1.23"
 
-bson@^4.0.0-rc5:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-4.0.2.tgz#2929fdfed1a145b1c361908a2b950a6cf4bed2c2"
-  integrity sha512-rBdCxMBCg2aR420e1oKUejjcuPZLTibA7zEhWAlliFWEwzuBCC9Dkp5r7VFFIQB2t1WVsvTbohry575mc7Xw5A==
-  dependencies:
-    buffer "^5.1.0"
-    long "^4.0.0"
+bson@^1.1.0:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-1.1.3.tgz#aa82cb91f9a453aaa060d6209d0675114a8154d3"
+  integrity sha512-TdiJxMVnodVS7r0BdL42y/pqC9cL2iKynVwA0Ho3qbsQYr428veL3l7BQyuqiw+Q5SqqoT0m4srSY/BlZ9AxXg==
 
 buffer-equal-constant-time@1.0.1:
   version "1.0.1"
@@ -2556,14 +2553,6 @@ buffer@^4.3.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
-
-buffer@^5.1.0:
-  version "5.2.1"
-  resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.2.1.tgz#dd57fa0f109ac59c602479044dca7b8b3d0b71d6"
-  integrity sha512-c+Ko0loDaFfuPWiL02ls9Xd3GO3cPVmUobQ6t3rXNUk304u6hGq+8N/kFi+QEIKhzK3uwolVhLzszmfLmMLnqg==
-  dependencies:
-    base64-js "^1.0.2"
-    ieee754 "^1.1.4"
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
@@ -7117,11 +7106,6 @@ loglevel@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.6.tgz#0ee6300cc058db6b3551fa1c4bf73b83bb771312"
   integrity sha512-Sgr5lbboAUBo3eXCSPL4/KoVz3ROKquOjcctxmHIt+vol2DrqTQe3SwkKKuYhEiWB5kYa13YyopJ69deJ1irzQ==
-
-long@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/long/-/long-4.0.0.tgz#9a7b71cfb7d361a194ea555241c92f7468d5bf28"
-  integrity sha512-XsP+KhQif4bjX1kbuSiySJFNAehNxgLb6hPRGJ9QsUr8ajHkuXGdrHmFUTUUXhDwVX2R5bY4JNZEwbUiMhV+MA==
 
 longest@^2.0.1:
   version "2.0.1"
