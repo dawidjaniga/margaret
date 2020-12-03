@@ -11263,9 +11263,9 @@ syntax-error@^1.1.4:
     acorn-node "^1.2.0"
 
 systeminformation@^4.14.16:
-  version "4.21.2"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.21.2.tgz#0ee92c0565687a5301ba141444643b43d0370ae2"
-  integrity sha512-7O6laxHTstfj9MSrX77lKLfWz0zqqutWL0+uoJkR7sOOr4XCTwD0QG4shUVCiOWlVX+a8/gHJUio420FrSk8/w==
+  version "4.30.11"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-4.30.11.tgz#ad0515007190dfec6bef22bc8aa1cbad7623821d"
+  integrity sha512-dR2OJMvyBeF+VZ36851O7oQEUFdNtux3xFI+xAFbWg5J/mh5lQOBiceHTkYOyvGf++mMIKgpeAmYnKy+cyWIdw==
 
 table@^5.2.3:
   version "5.2.3"
