@@ -46,7 +46,7 @@
     "pg": "7.18.1",
     "react-google-button": "0.6.0",
     "react-hot-loader": "4.12.7",
-    "react-google-button": "0.5.3",
+    "react-google-button": "0.7.1",
     "react-hot-loader": "4.12.16",
     "react-redux": "7.2.0",
     "react-router-dom": "5.1.2",
