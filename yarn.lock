@@ -9802,10 +9802,10 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux-create-reducer@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/redux-create-reducer/-/redux-create-reducer-2.0.0.tgz#1a88a63b567ae73ef435007c26a8cf0897e3802c"
-  integrity sha512-WnTUwIKuvNWlupCRMnIi040mMqA9ALDGuUNUOSPlpz5eUP7L5AJ5/rqMXVdvOhIeQtI8ubw8nFg2zAjlrG7IIg==
+redux-create-reducer@2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/redux-create-reducer/-/redux-create-reducer-2.0.1.tgz#9173c7a1ccac2db470c9b50f2195987db4efe606"
+  integrity sha512-uwzxDEEGdeiKcD7o1+daY3p5oblpqW/KQPzbMdi2JHg07I0l+RNcBUI//qvYC4i9SyAZkgnoeH/WOTWKx87HVQ==
 
 redux-persist@6.0.0:
   version "6.0.0"
