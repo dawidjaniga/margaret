@@ -37,7 +37,7 @@
     "antd": "4.9.2",
     "axios": "0.19.2",
     "combokeys": "3.0.1",
-    "date-fns": "2.0.0",
+    "date-fns": "2.16.1",
     "dotenv-webpack": "6.0.0",
     "handlebars": "4.7.3",
     "handlebars-loader": "1.7.1",
