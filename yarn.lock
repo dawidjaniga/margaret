@@ -1378,19 +1378,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.45.tgz#4c49ba34106bc7dced77ff6bae8eb6543cde8351"
   integrity sha512-tGVTbA+i3qfXsLbq9rEq/hezaHY55QxQLeXQL2ejNgFAxxrgu8eMmYIOsRcl7hN1uTLVsKOOYacV/rcJM3sfgQ==
 
-"@types/prop-types@*":
-  version "15.7.0"
-  resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"
-  integrity sha512-eItQyV43bj4rR3JPV0Skpl1SncRCdziTEK9/v8VwXmV6d/qOUO8/EuWeHBbCZcsfSHfzI5UyMJLCSXtxxznyZg==
-
-"@types/react@^15.0.0 || ^16.0.0":
-  version "16.9.19"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.19.tgz#c842aa83ea490007d29938146ff2e4d9e4360c40"
-  integrity sha512-LJV97//H+zqKWMms0kvxaKYJDG05U2TtQB3chRLF8MPNs+MQh/H1aGlyDUxjaHvu08EAGerdX2z4LTBc7ns77A==
-  dependencies:
-    "@types/prop-types" "*"
-    csstype "^2.2.0"
-
 "@types/through@*":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/through/-/through-0.0.29.tgz#72943aac922e179339c651fa34a4428a4d722f93"
@@ -3577,11 +3564,6 @@ cssesc@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-3.0.0.tgz#37741919903b868565e1c09ea747445cd18983ee"
   integrity sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==
-
-csstype@^2.2.0:
-  version "2.6.3"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.3.tgz#b701e5968245bf9b08d54ac83d00b624e622a9fa"
-  integrity sha512-rINUZXOkcBmoHWEyu7JdHu5JMzkGRoMX4ov9830WNgxf5UYxcBUO0QTKAqeJ5EZfSdlrcJYkC8WwfVW7JYi4yg==
 
 culvert@^0.1.2:
   version "0.1.2"
@@ -9770,12 +9752,11 @@ react-google-button@0.7.1:
   dependencies:
     prop-types "^15.7.2"
 
-react-hot-loader@4.12.16:
-  version "4.12.16"
-  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.12.16.tgz#353bd07fbb08f791b5720535f86b0a8f9b651317"
-  integrity sha512-KC33uTBacgdunMtfpZFP2pgPpyvKIcCwuh0XmWESbeFrkWLqUtCFN91zyaTdU5OiAM982+E8xh1gjE5EINumaw==
+react-hot-loader@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.13.0.tgz#c27e9408581c2a678f5316e69c061b226dc6a202"
+  integrity sha512-JrLlvUPqh6wIkrK2hZDfOyq/Uh/WeVEr8nc7hkn2/3Ul0sx1Kr5y4kOGNacNRoj7RhwLNcQ3Udf1KJXrqc0ZtA==
   dependencies:
-    "@types/react" "^15.0.0 || ^16.0.0"
     fast-levenshtein "^2.0.6"
     global "^4.3.0"
     hoist-non-react-statics "^3.3.0"
