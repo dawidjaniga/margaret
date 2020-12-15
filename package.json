@@ -35,7 +35,7 @@
     "@adonisjs/vow": "1.0.17",
     "@hot-loader/react-dom": "16.11.0",
     "antd": "4.9.3",
-    "axios": "0.19.2",
+    "axios": "0.21.0",
     "combokeys": "3.0.1",
     "date-fns": "2.16.1",
     "dotenv-webpack": "6.0.0",
