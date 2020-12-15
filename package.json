@@ -81,7 +81,7 @@
     "react-chartjs-2": "2.11.1",
     "react-dom": "16.13.0",
     "webpack": "4.41.6",
-    "webpack-cli": "3.3.10",
+    "webpack-cli": "4.2.0",
     "webpack-dev-server": "3.11.0",
     "webpack-merge": "4.2.2"
   },
