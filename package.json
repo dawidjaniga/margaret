@@ -49,7 +49,7 @@
     "react-google-button": "0.7.1",
     "react-hot-loader": "4.12.16",
     "react-redux": "7.2.2",
-    "react-router-dom": "5.1.2",
+    "react-router-dom": "5.2.0",
     "redux": "4.0.5",
     "redux-create-reducer": "2.0.1",
     "redux-persist": "6.0.0",
