@@ -33,7 +33,7 @@
     "@adonisjs/session": "^1.0.29",
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/vow": "1.0.17",
-    "@hot-loader/react-dom": "16.11.0",
+    "@hot-loader/react-dom": "16.14.0",
     "antd": "4.9.3",
     "axios": "0.19.2",
     "combokeys": "3.0.1",
