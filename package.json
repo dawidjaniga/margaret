@@ -42,7 +42,7 @@
     "handlebars": "4.7.6",
     "handlebars-loader": "1.7.1",
     "hot-loader": "0.0.0",
-    "pm2": "4.5.1",
+    "pm2": "4.5.5",
     "pg": "8.5.1",
     "react-google-button": "0.6.0",
     "react-hot-loader": "4.12.7",
